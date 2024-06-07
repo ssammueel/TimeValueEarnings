@@ -1,67 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import './cm_css/Button.css';
-import './cm_css/Year.css';
+  import React, { useState, useEffect } from 'react';
+  import './cm_css/Button.css';
+  import './cm_css/Year.css';
 
-export const Day = () => {
-  const [amount, setAmount] = useState("");
-  const [days, setDays] = useState("");
-  const [hours, setHours] = useState("");
-  const [err, setErr] = useState("");
-  const [results, setResults] = useState({
-    dayResult: 0,
-    hourResult: 0,
-    minuteResult: 0,
-  });
-
-  useEffect(() => {
-    if (err) {
-      const timer = setTimeout(() => {
-        setErr("");
-      }, 2000); // 2000 milliseconds = 2 seconds
-
-      return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
-    }
-  }, [err]);
-
-  const formatNumber = (value) => {
-    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const handleAmountChange = (e) => {
-    const value = e.target.value.replace(/,/g, ''); // Remove commas for plain number
-    if (!isNaN(value) && value.length <= 15) { // Validate if value is a number and limit the length
-      setAmount(formatNumber(value));
-    }
-  };
-
-  const handleCalculate = (e) => {
-    e.preventDefault();
-    const numericAmount = parseFloat(amount.replace(/,/g, '')); // Remove commas for calculations
-    const numericDays = parseFloat(days);
-    const numericHours = parseFloat(hours);
-
-    if (!numericAmount || !numericDays || !numericHours) {
-      setErr("All fields are required.");
-      return;
-    }
-    if (numericAmount <= 0 || numericDays <= 0 || numericHours <= 0) {
-      setErr("Values must be greater than zero.");
-      return;
-    }
-
-    const dayResult = (numericAmount / numericDays).toFixed(2);
-    const hourResult = (dayResult / numericHours).toFixed(2);
-    const minuteResult = (hourResult / 60).toFixed(2);
-
-    setResults({
-      dayResult,
-      hourResult,
-      minuteResult,
+  export const Day = () => {
+    const [amount, setAmount] = useState("");
+    const [days, setDays] = useState("");
+    const [hours, setHours] = useState("");
+    const [err, setErr] = useState("");
+    const [results, setResults] = useState({
+      dayResult: 0,
+      hourResult: 0,
+      minuteResult: 0,
     });
-  };
 
-  return (
-    <>
+    useEffect(() => {
+      if (err) {
+        const timer = setTimeout(() => {
+          setErr("");
+        }, 2000); // 2000 milliseconds = 2 seconds
+
+        return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+      }
+    }, [err]);
+
+    const formatNumber = (value) => {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    const handleAmountChange = (e) => {
+      const value = e.target.value.replace(/,/g, ''); // Remove commas for plain number
+      if (!isNaN(value) && value.length <= 15) { // Validate if value is a number and limit the length
+        setAmount(formatNumber(value));
+      }
+    };
+
+    const handleCalculate = (e) => {
+      e.preventDefault();
+      const numericAmount = parseFloat(amount.replace(/,/g, '')); // Remove commas for calculations
+      const numericDays = parseFloat(days);
+      const numericHours = parseFloat(hours);
+
+      if (!numericAmount || !numericDays || !numericHours) {
+        setErr("All fields are required.");
+        return;
+      }
+      if (numericAmount <= 0 || numericDays <= 0 || numericHours <= 0) {
+        setErr("Values must be greater than zero.");
+        return;
+      }
+
+      const dayResult = (numericAmount / numericDays).toFixed(2);
+      const hourResult = (dayResult / numericHours).toFixed(2);
+      const minuteResult = (hourResult / 60).toFixed(2);
+
+      setResults({
+        dayResult,
+        hourResult,
+        minuteResult,
+      });
+    };
+
+    return (
       <div className='main-one'>
         <form className='form' onSubmit={handleCalculate}>
           <p>Enter Target Amount</p>
@@ -74,19 +73,19 @@ export const Day = () => {
             onChange={handleAmountChange}
           />
 
-          <p>Days to work</p>
+          <p>Days to Work</p>
           <input
             className='inp'
             type="number"
-            placeholder='Days to work'
+            placeholder='Days to Work'
             name='days'
             value={days}
             onChange={(e) => {
-              const value = e.target.value;
-              if (value <= 366) {
+              const value = parseFloat(e.target.value);
+              if (value > 0 && value <= 366) {
                 setDays(value);
               } else {
-                setErr("Your days are more than a year.");
+                setErr("Days must be between 1 and 366.");
                 setDays("");
               }
             }}
@@ -96,15 +95,15 @@ export const Day = () => {
           <input
             className='inp'
             type="number"
-            placeholder='Hours to work in a day'
+            placeholder='Hours to Work in a Day'
             name='hours'
             value={hours}
             onChange={(e) => {
-              const value = e.target.value;
-              if (value <= 24) {
+              const value = parseFloat(e.target.value);
+              if (value > 0 && value <= 24) {
                 setHours(value);
               } else {
-                setErr("Hours cannot exceed 24.");
+                setErr("Hours must be between 1 and 24.");
                 setHours("");
               }
             }}
@@ -115,16 +114,16 @@ export const Day = () => {
 
         <div className="part2">
           <div className="results1 form">
-            <h3>Your Target Amount is: {amount}</h3>
+          <p style={{ color: 'black', fontSize: '21px' }}>Your Target Amount is : <b><u>{amount}</u></b> in <b><u>{days}</u></b> months period</p>
             <ul className='li'>
-              <li><b>Per Day: </b>{amount} / {days} = {results.dayResult}</li>
-              <li><b>Per Hour : </b>{results.dayResult} / {hours} = {results.hourResult}</li>
-              <li><b>Per Minute : </b>{results.hourResult} / 60 = {results.minuteResult}</li>
+              <li><b>Per Day: </b>{results.dayResult}</li>
+              <li><b>Per Hour: </b>{results.hourResult}</li>
+              <li><b>Per Minute: </b>{results.minuteResult}</li>
             </ul>
           </div>
           <div className="results1"></div>
         </div>
       </div>
-    </>
-  );
-};
+    );
+  };
+    

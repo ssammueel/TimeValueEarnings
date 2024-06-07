@@ -16,7 +16,7 @@ export const Header = () => {
                 <li><Link to="/Week">Week</Link></li>
                 <li><Link to="/day">Day</Link></li>
                 <li><Link to="/Hour">Hour</Link></li>
-                <li><Link to="/Minute">Minute</Link></li>
+                {/* <li><Link to="/Minute">Minute</Link></li> */}
             </ul>
         </div>
         

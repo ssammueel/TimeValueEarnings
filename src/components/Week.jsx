@@ -3,72 +3,69 @@ import './cm_css/Button.css';
 import './cm_css/Year.css';
 
 export const Week = () => {
-const [amount, setAmount] = useState("");
-const [week, setWeek] = useState("");
-const [days, setDays] = useState("");
-const [hours, setHours] = useState("");
-const [err, setErr] = useState("");
-const [results, setResults] = useState({
-  
-  weekResult: 0,
-  dayResult: 0,
-  hourResult: 0,
-  minuteResult: 0,
-});
-
-useEffect(() => {
-  if (err) {
-    const timer = setTimeout(() => {
-      setErr("");
-    }, 1000); // 3000 milliseconds = 3 seconds
-
-    return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
-  }
-}, [err]);
-
-const formatNumber = (value) => {
-  return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-const handleAmountChange = (e) => {
-  const value = e.target.value.replace(/,/g, ''); // Remove commas for plain number
-  if (!isNaN(value) && value.length <= 15) { // Validate if value is a number and limit the length
-    setAmount(formatNumber(value));
-  }
-};
-
-const handleCalculate = (e) => {
-  e.preventDefault();
-  const numericAmount = parseFloat(amount.replace(/,/g, '')); // Remove commas for calculations
-  const numericWeek = parseFloat(week);
-  const numericDays = parseFloat(days);
-  const numericHours = parseFloat(hours);
-
-  if (!numericAmount || !numericWeek || !numericDays || !numericHours) {
-    setErr("All fields are required.");
-    return;
-  }
-  if (numericWeek <= 0 || numericDays <= 0 || numericHours <= 0) {
-    setErr("Values must be greater than zero.");
-    return;
-  }
-
-  const weekResult = (numericAmount / 4).toFixed(2);
-  const dayResult = (weekResult / numericDays).toFixed(2);
-  const hourResult = (dayResult / numericHours).toFixed(2);
-  const minuteResult = (hourResult / 60).toFixed(2);
-
-  setResults({
-    weekResult,
-    dayResult,
-    hourResult,
-    minuteResult,
+  const [amount, setAmount] = useState("");
+  const [weeks, setWeeks] = useState("");
+  const [days, setDays] = useState("");
+  const [hours, setHours] = useState("");
+  const [err, setErr] = useState("");
+  const [results, setResults] = useState({
+    weekResult: 0,
+    dayResult: 0,
+    hourResult: 0,
+    minuteResult: 0,
   });
 
+  useEffect(() => {
+    if (err) {
+      const timer = setTimeout(() => {
+        setErr("");
+      }, 3000); // 3000 milliseconds = 3 seconds
+
+      return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
+    }
+  }, [err]);
+
+  const formatNumber = (value) => {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value.replace(/,/g, ''); // Remove commas for plain number
+    if (!isNaN(value) && value.length <= 15) { // Validate if value is a number and limit the length
+      setAmount(formatNumber(value));
+    }
+  };
+
+  const handleCalculate = (e) => {
+    e.preventDefault();
+    const numericAmount = parseFloat(amount.replace(/,/g, '')); // Remove commas for calculations
+    const numericWeeks = parseFloat(weeks);
+    const numericDays = parseFloat(days);
+    const numericHours = parseFloat(hours);
+
+    if (!numericAmount || !numericWeeks || !numericDays || !numericHours) {
+      setErr("All fields are required.");
+      return;
+    }
+    if (numericWeeks <= 0 || numericDays <= 0 || numericHours <= 0) {
+      setErr("Values must be greater than zero.");
+      return;
+    }
+
+    const weekResult = (numericAmount / numericWeeks).toFixed(2);
+    const dayResult = (weekResult / numericDays).toFixed(2);
+    const hourResult = (dayResult / numericHours).toFixed(2);
+    const minuteResult = (hourResult / 60).toFixed(2);
+
+    setResults({
+      weekResult,
+      dayResult,
+      hourResult,
+      minuteResult,
+    });
   };
 
   return (
-    <>
     <div className='main-one'>
       <form className='form' onSubmit={handleCalculate}>
         <p>Enter Target Amount</p>
@@ -76,34 +73,34 @@ const handleCalculate = (e) => {
           className='inp'
           type="text"
           placeholder='Amount Target'
-          name='Amount'
+          name='amount'
           value={amount}
           onChange={handleAmountChange}
         />
 
-        <p>Enter Duration in weeks</p>
+        <p>Enter Duration in Weeks</p>
         <input
           className='inp'
           type="number"
-          placeholder='Duration weeks'
+          placeholder='Duration Weeks'
           name='weeks'
-          value={week}
-          onChange={(e) => setWeek(e.target.value)}
+          value={weeks}
+          onChange={(e) => setWeeks(e.target.value)}
         />
 
-        <p>Days you work in a week</p>
+        <p>Days you work in a Week</p>
         <input
           className='inp'
           type="number"
-          placeholder='Days to work in each week'
+          placeholder='Days to Work in Each Week'
           name='days'
           value={days}
           onChange={(e) => {
-            let event = e.target.value;
-            if (event <= 7) {
-              setDays(event);
+            const value = parseFloat(e.target.value);
+            if (value <= 7 && value > 0) {
+              setDays(value);
             } else {
-              setErr("Days can't exceed 7");
+              setErr("Days must be between 1 and 7");
               setDays("");
             }
           }}
@@ -113,15 +110,15 @@ const handleCalculate = (e) => {
         <input
           className='inp'
           type="number"
-          placeholder='Hours to work in a day'
+          placeholder='Hours to Work in a Day'
           name='hours'
           value={hours}
           onChange={(e) => {
-            const value = e.target.value;
-            if (value <= 24) {
+            const value = parseFloat(e.target.value);
+            if (value <= 24 && value > 0) {
               setHours(value);
             } else {
-              setErr("Hours cannot exceed 24");
+              setErr("Hours must be between 1 and 24");
               setHours("");
             }
           }}
@@ -132,17 +129,16 @@ const handleCalculate = (e) => {
 
       <div className="part2">
         <div className="results1 form">
-          <h3>Your Target Amount is: {amount}</h3>
+        <p style={{ color: 'black', fontSize: '21px' }}>Your Target Amount is : <b><u>{amount}</u></b> in <b><u>{weeks}</u></b> months period</p>
           <ul className='li'>
-            <li><b>Per Week : </b>{amount} / {week} = {results.weekResult}</li>
-            <li><b>Per Day: </b>{results.weekResult} / {days} = {results.dayResult}</li>
-            <li><b>Per Hour : </b>{results.dayResult} / {hours} = {results.hourResult}</li>
-            <li><b>Per Minute : </b>{results.hourResult} / 60 = {results.minuteResult}</li>
+            <li><b>Per Week : </b>{results.weekResult}</li>
+            <li><b>Per Day : </b>{results.dayResult}</li>
+            <li><b>Per Hour : </b>{results.hourResult}</li>
+            <li><b>Per Minute : </b>{results.minuteResult}</li>
           </ul>
         </div>
         <div className="results1"></div>
       </div>
     </div>
-  </>
   );
 };

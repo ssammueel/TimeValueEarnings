@@ -132,13 +132,13 @@ export const Month = () => {
 
         <div className="part2">
           <div className="results1 form">
-            <h3>Your Target Amount is: {amount}</h3>
+            <p style={{ color: 'black', fontSize: '21px' }}>Your Target Amount is : <b><u>{amount}</u></b> in <b><u>{months}</u></b> months period</p>
             <ul className='li'>
-              <li><b>Per Month : </b>{amount} / {months} = {results.monthResult}</li>
-              <li><b>Per Week : </b>{results.monthResult} / 4 = {results.weekResult}</li>
-              <li><b>Per Day: </b>{results.weekResult} / {days} = {results.dayResult}</li>
-              <li><b>Per Hour : </b>{results.dayResult} / {hours} = {results.hourResult}</li>
-              <li><b>Per Minute : </b>{results.hourResult} / 60 = {results.minuteResult}</li>
+              <li><b>Per Month : </b>{results.monthResult}</li>
+              <li><b>Per Week : </b>{results.weekResult}</li>
+              <li><b>Per Day: </b>{results.dayResult}</li>
+              <li><b>Per Hour : </b>{results.hourResult}</li>
+              <li><b>Per Minute : </b>{results.minuteResult}</li>
             </ul>
           </div>
           <div className="results1"></div>
